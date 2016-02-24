@@ -651,6 +651,19 @@ if ($results) {
                 ?>
             </select>
         </fieldset>
+        <fieldset class="owner span6">
+            <label for="openedId"><?php echo __('Created By');?>:</label>
+            <select id="openedId" name="openedId">
+                <option value="0">&mdash; <?php echo __('Anyone');?> &mdash;</option>
+                <option value="<?php echo $thisstaff->getId(); ?>"><?php echo __('Me');?></option>
+                <?php
+                if(($users=Staff::getStaffMembers())) {
+                    foreach($users as $id => $name)
+                        echo sprintf('<option value="%d">%s</option>', $id, $name);
+                }
+                ?>
+            </select>
+        </fieldset>
         <fieldset class="date_range">
             <label><?php echo __('Date Range').' &mdash; '.__('Create Date');?>:</label>
             <input class="dp" type="input" size="20" name="startDate">

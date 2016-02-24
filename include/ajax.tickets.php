@@ -107,6 +107,17 @@ class TicketsAjaxAPI extends AjaxController {
         $from = ' FROM '.TICKET_TABLE.' ticket
                   LEFT JOIN '.TICKET_STATUS_TABLE.' status
                     ON (status.id = ticket.status_id) ';
+
+        //Created by
+        if($req['openedId']) {
+            $from .= 'INNER JOIN ost_staff created_staff
+                        ON (created_staff.staff_id = '.db_input($req['openedId']).')
+                      INNER JOIN '.TICKET_THREAD_TABLE.' thread
+                        ON (thread.ticket_id = ticket.ticket_id)
+                        AND thread.title = "New Ticket by Agent"
+                        AND body = CONCAT_WS(" ", "Ticket created by agent -", created_staff.firstname, created_staff.lastname)';
+        }
+
         //Access control.
         $where = ' WHERE ( (ticket.staff_id='.db_input($thisstaff->getId())
                     .' AND status.state="open" )';
